@@ -22,8 +22,8 @@ class TestServerlessAccountManagerAuth:
             correct_password)  # Предположим, что метод существует в классе или импортирован
         correct_session = 1
 
-        #record
-        ...
+        # record
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -43,8 +43,8 @@ class TestServerlessAccountManagerAuth:
         encodedIncorrect = AccountManager.get_encoded_password(incorrect_password) if hasattr(AccountManager,
                                                                                               'get_encoded_password') else ""
 
-        #record
-        ...
+        # record
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.NO_USER_INCORRECT_PASSWORD, None)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -76,8 +76,8 @@ class TestServerlessAccountManagerAuth:
         encodedIncorrect = "mocked_encoded"
         correct_session = 1
 
-        #record
-        ...
+        # record
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.ALREADY_LOGGED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -101,8 +101,8 @@ class TestServerlessAccountManagerAuth:
         encodedIncorrect = "mocked_encoded"
         correct_session = 1
 
-        #record
-        ...
+        # record
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
 
         #arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -132,7 +132,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -155,7 +156,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -182,7 +184,8 @@ class TestServerlessAccountManagerAuth:
         correct_session = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)
@@ -316,7 +319,8 @@ class TestServerlessAccountManagerAuth:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, correct_session)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.INCORRECT_SESSION, None)
 
         # arrange_2
         account_manager = AccountManager(self.auth_source, self.data_source)

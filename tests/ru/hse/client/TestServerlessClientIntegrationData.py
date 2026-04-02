@@ -24,7 +24,8 @@ class TestServerlessClientIntegrationData:
         start_balance = 0.0
 
         #record (имитируем поведение)
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -45,7 +46,9 @@ class TestServerlessClientIntegrationData:
         start_balance = 0.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -77,7 +80,8 @@ class TestServerlessClientIntegrationData:
         start_balance = 0.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.get_balance.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -105,7 +109,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct_deposit)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -151,7 +156,9 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -180,7 +187,13 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.side_effect = [
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+        ]
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -214,7 +227,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -244,7 +258,13 @@ class TestServerlessClientIntegrationData:
         delta_correct_deposit = 100.0
 
         # record
-        ...
+        self.auth_source.login.side_effect = [
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+        ]
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -271,7 +291,8 @@ class TestServerlessClientIntegrationData:
         initial_balance = 50.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NO_MONEY, initial_balance)
 
 
         # arrange_2
@@ -297,7 +318,10 @@ class TestServerlessClientIntegrationData:
         withdraw_amount = 200.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, deposit_amount)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.SUCCEED,
+                                                                   deposit_amount - withdraw_amount)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -322,7 +346,12 @@ class TestServerlessClientIntegrationData:
         delta_deposit = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_deposit)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.SUCCEED,
+                                                                   delta_deposit - delta_withdraw)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED,
+                                                                      delta_deposit - delta_withdraw)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -346,7 +375,9 @@ class TestServerlessClientIntegrationData:
         delta_withdraw = 100.0
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -374,7 +405,13 @@ class TestServerlessClientIntegrationData:
         delta_withdraw = 100.0
 
         #record
-        ...
+        self.auth_source.login.side_effect = [
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+        ]
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -407,7 +444,8 @@ class TestServerlessClientIntegrationData:
         delta_correct_withdraw = 100.0
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
 
         # arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -440,7 +478,13 @@ class TestServerlessClientIntegrationData:
         delta_correct_withdraw = 100.0
 
         # record
-        ...
+        self.auth_source.login.side_effect = [
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+        ]
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, start_balance)
 
         # Arrange_2
         client = Client(self.auth_source, self.data_source)

@@ -32,13 +32,23 @@ class TestServerClientSystem:
         server_dir = project_root / "server"
         jar_path = server_dir / "HomeTask04Java.jar"
 
-        ...
+        process = Popen(
+            ["java", "-jar", str(jar_path)],
+            cwd=server_dir,
+            stdout=PIPE,
+            stderr=PIPE,
+        )
 
         _wait_port("127.0.0.1", 7000, timeout_s=12)
 
         yield "local-server"
 
-        ...
+        process.terminate()
+        try:
+            process.wait(timeout=5)
+        except Exception:
+            process.kill()
+            process.wait(timeout=5)
 
     def setup_method(self):
         self.client = Client(os.getenv("SERVER_URL", "http://localhost:7000"), None)

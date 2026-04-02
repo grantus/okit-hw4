@@ -24,7 +24,7 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -49,7 +49,10 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(
+            exception_code,
+            session_id if exception_code == OperationResponse.ALREADY_LOGGED else None
+        )
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -69,7 +72,11 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.side_effect = [
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+            OperationResponse(OperationResponse.SUCCEED, session_id),
+        ]
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
 
 
         #arrange_2
@@ -91,7 +98,7 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -114,7 +121,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.NOT_LOGGED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -160,7 +168,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -184,7 +193,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         # record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)
@@ -207,7 +217,8 @@ class TestServerlessClientIntegrationAuth:
         session_id = 1
 
         #record
-        ...
+        self.auth_source.login.return_value = OperationResponse(OperationResponse.SUCCEED, session_id)
+        self.auth_source.logout.return_value = OperationResponse(OperationResponse.SUCCEED, None)
 
         #arrange_2
         client = Client(self.auth_source, self.data_source)

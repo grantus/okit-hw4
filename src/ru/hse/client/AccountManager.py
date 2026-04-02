@@ -98,7 +98,8 @@ class AccountManager:
         response = self.server_auth_data.register(login, password)
         if response.code == OperationResponse.SUCCEED:
             answer = response.body
-            if answer and isinstance(answer, int):  # Assuming int instead of Long
+            # without the fix answer = 0 is treated as invalid
+            if answer is not None and isinstance(answer, int):  # Assuming int instead of Long
                 account = Account(login)
                 account.active_session = answer
                 account.init_data_storage(self.server_accounts_data)

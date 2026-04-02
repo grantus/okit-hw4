@@ -35,7 +35,7 @@ class TestServerlessAccountModuleData:
         delta_correct = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct)
 
         #arrange_2
         account = Account(correct_login)
@@ -66,7 +66,7 @@ class TestServerlessAccountModuleData:
         delta_correct = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)
@@ -106,7 +106,7 @@ class TestServerlessAccountModuleData:
         delta_too_much_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.NO_MONEY, init_balance)
 
         #arrange_2
         account = Account(correct_login)
@@ -131,7 +131,9 @@ class TestServerlessAccountModuleData:
         delta_correct_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.deposit.return_value = OperationResponse(OperationResponse.SUCCEED, delta_correct_deposit)
+        self.data_source.withdraw.return_value = OperationResponse(OperationResponse.SUCCEED,
+                                                                   delta_correct_deposit - delta_correct_withdraw)
 
         #arrange_2
         account = Account(correct_login)
@@ -163,7 +165,7 @@ class TestServerlessAccountModuleData:
         delta_correct_withdraw = 100.0
 
         #record
-        ...
+        self.data_source.withdraw.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)
@@ -212,7 +214,7 @@ class TestServerlessAccountModuleData:
         init_balance = 50.0
 
         #record
-        ...
+        self.data_source.get_balance.return_value = OperationResponse(OperationResponse.SUCCEED, init_balance)
 
         #arrange_2
         account = Account(correct_login)
@@ -242,7 +244,7 @@ class TestServerlessAccountModuleData:
         init_balance = 50.0
 
         #record
-        ...
+        self.data_source.get_balance.return_value = OperationResponse(exception_code, None)
 
         #arrange_2
         account = Account(correct_login)
